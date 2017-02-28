@@ -8,7 +8,7 @@ Nand2Tetris is a self-directed, project-oriented online course whose aim is to b
 
 ## Notable
 
-While many of the chips and programs implemented here are rather trivial, there are a few that are highly instructive. These are:
+Some of the chips and programs developed in this course are highly instructive. Notable examples are:
 
 ### [ALU.hdl](https://github.com/m-cat/nand2tetris/blob/master/project2/ALU.hdl)
 
