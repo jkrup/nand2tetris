@@ -16,11 +16,15 @@ The Arithmetic Logic Unit.
 
 ### [PC.hdl](https://github.com/m-cat/nand2tetris/blob/master/project3/PC.hdl)
 
-The Program Counter - probably the hardest assignment.
+The Program Counter - quite tricky
 
 ### [Fill.asm](https://github.com/m-cat/nand2tetris/blob/master/project4/Fill.asm)
 
 An example assembly program, showcasing our assembly language and machine architecture.
+
+### [CPU.hdl](https://github.com/m-cat/nand2tetris/blob/master/project5/CPU.hdl)
+
+The CPU - the most involved assignment
 
 ## Legal
 
