@@ -3,3 +3,7 @@
 *.cmp
 *.out
 *.#*
+
+*.log
+nimcache/
+asm/

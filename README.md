@@ -24,9 +24,13 @@ An example assembly program, showcasing our assembly language and machine archit
 
 ### [CPU.hdl](https://github.com/m-cat/nand2tetris/blob/master/project5/CPU.hdl)
 
-The CPU - the most involved assignment
+The CPU - the most involved hardware assignment
 
-## Legal
+### [Assembler.nim](https://github.com/m-cat/nand2tetris/blob/master/project6/Assembler.nim)
+
+An assembler written in the Python-like program Nim. Supports symbols. Was a pleasure to write this one.
+
+## Disclaimer
 
 The contents of this repository are my work and belong to me alone. Unauthorized usage of these files, namely to pass this course, is expressly prohibited.
 
