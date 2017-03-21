@@ -28,7 +28,7 @@ The CPU - the most involved hardware assignment
 
 ### [Assembler.nim](https://github.com/m-cat/nand2tetris/blob/master/project6/Assembler.nim)
 
-An assembler written in the Python-like program Nim. Supports symbols. Was a pleasure to write this one.
+An assembler written in the Python-like language Nim. Supports symbols. Was a pleasure to write this one.
 
 ## Disclaimer
 
