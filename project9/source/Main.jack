@@ -1,0 +1,106 @@
+// Dungeon Dude
+// Main.jack
+// Author: Marcin Swieczkowski
+// Created: Wed Mar 22 20:09:04 CET 2017
+//
+// Dungeon Dude is a basic roguelike game built in Jack.
+//
+// It features pseudo-random dungeon generation based on
+// a user-entered seed and a never-ending dungeon.
+//
+// You earn points by slaying monsters, collecting treasure,
+// and delving deeper into the dungeon.
+//
+// Instructions:
+//
+// TODO
+//
+// Glossary of symbols:
+// @ - the player
+// > - downward staircase
+// + - portion of food
+// $ - pile of gold
+// p - pixie-elf
+// G - goron
+
+/** Class containing main game initialization and logic **/
+class Main {
+    static String name; // player name
+
+    static int level;
+    static int exp;
+    static int gold;
+    static int hp, hp_max;
+
+    /** Show the title screen and get player name **/
+    function void titleScreen() {
+        var int seed;
+        var String welcome;
+        var boolean ok;
+
+        do Screen.clearScreen();
+        do Utility.outStringCenter(0, "Dungeon Dude");
+        do Utility.outStringCenter(1, "A game by Marcin S.");
+        // do Sys.wait(1000);
+
+        do Output.println();
+        do Output.println();
+        do Utility.printStringLn("What is your name?");
+
+        // Query for a name, repeating if nothing was entered
+        let ok = 0;
+        while (~ok) {
+            let name = Keyboard.readLine("> ");
+            if (name.length() > 0) { let ok = 1; }
+        }
+
+        // Query for random number seed
+        do Output.println();
+        do Utility.printStringLn("What is your favorite number?");
+        let seed = Keyboard.readInt("> ");
+        do Random.setSeed(seed);
+
+        let welcome = Utility.stringAppend("Welcome ", name);
+        do Output.println();
+        do Utility.printStringLn(welcome);
+        do Utility.printStringLn("Your adventure begineth!");
+        do Output.println();
+        do Utility.printStringLn("Press any key to continue...");
+
+        do Keyboard.readChar(); // Wait for a key to be pressed
+
+        return;
+    }
+
+    /** Show the dungeon generation screen **/
+    function void generateScreen() {
+        do Screen.setColor(-1);
+        do Screen.drawRectangle(0,0,511,255);
+        do Utility.outStringCenter(11, "Generating dungeon...");
+
+        return;
+    }
+
+    /** Main entry point and game loop **/
+    function void main() {
+        var int result;
+        var char key;
+        var Dungeon dungeon;
+
+        do Utility.initUtil();        // Initialize Utility library
+
+        do Main.titleScreen();        // Display initial screen
+
+        do Main.generateScreen();     // Display generation screen
+        let dungeon = Dungeon.new(1); // Create the dungeon, set it to level 1
+        do dungeon.generate();        // Generate the initial dungeon layout
+        // do Sys.wait(1000);
+
+        while (-1) {
+            // let key = Keyboard.keyPressed();
+            let result = dungeon.nextStep();
+        }
+
+        return;
+    }
+}

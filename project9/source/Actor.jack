@@ -1,0 +1,83 @@
+// Dungeon Dude
+// Actor.jack
+// Author: Marcin Swieczkowski
+// Created: Thu Mar 23 18:08:41 CET 2017
+//
+// Actors are anything that moves - namely the player and enemies
+
+/** Class containing logic for the player and enemy characters **/
+class Actor {
+    field char C; // ascii character to draw the actor as
+    field Coord XY;
+    field int type;
+
+    field int hp;
+    field int hp_max;
+    field int atk;
+
+    method int x() { return XY.x(); }
+    method int y() { return XY.y(); }
+    method Coord xy() { return XY; }
+    method char c() { return C; }
+    method Room room() { return XY.room(); }
+
+    /** Set new coordinates **/
+    method void setXY(Coord c) {
+        do XY.dispose(); // get rid of the old coord
+        let XY = c;
+        return;
+    }
+
+    /** Set containing room **/
+    method void setRoom(Room r) {
+        do XY.setRoom(r);
+        return;
+    }
+
+    /** Initialize an instance of an actor **/
+    constructor Actor new(int t) {
+        // the "type" variable is an enum for the kind of actor:
+        // 0 - player
+        // 1 - worm
+
+        let XY = Coord.new(0, 0);
+        let type = t;
+
+        if (t = 0) {
+            let C = 64; // @
+            return this;
+        }
+        if (t = 1) {
+            let C = 119; // w
+            return this;
+        }
+
+        return this;
+    }
+
+    /** Dispose! **/
+    method void dispose() {
+        do XY.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    /** Act out a turn in the dungeon **/
+    method int act(Dungeon dungeon) {
+        var char ch;
+
+        if (type = 0) {
+            // Get rid of the cursor
+            do Output.moveCursor(Utility.SCR_H()-1, Utility.SCR_W()-1);
+            let ch = Keyboard.readChar();
+        }
+        else {
+        }
+
+        return 0;
+    }
+
+    /** Set player hp based on level **/
+    method void setHPMax(int level) {
+    }
+}

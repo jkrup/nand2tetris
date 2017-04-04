@@ -1,0 +1,62 @@
+// Dungeon Dude
+// Coord.jack
+// Author: Marcin Swieczkowski
+// Created: Fri Mar 24 21:23:04 CET 2017
+//
+// Simple class for x/y coordinates and comparing them
+
+/** Class containing coordinates and some associated logic **/
+class Coord {
+    field int X;
+    field int Y;
+    field Room room;
+
+    method int x() { return X; }
+    method int y() { return Y; }
+    method Room room() { return room; }
+
+    /** Set the room containing the coord **/
+    method void setRoom(Room r) {
+        let room = r;
+        return;
+    }
+
+    /** Initialize a new coordinate **/
+    constructor Coord new(int i, int j) {
+        let Y = i;
+        let X = j;
+
+        return this;
+    }
+
+    /** Dispose! **/
+    method void dispose() {
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    method void setX(int j) {
+        let X = j;
+        return;
+    }
+    method void setY(int i) {
+        let Y = i;
+        return;
+    }
+
+    /** Add some amount to x **/
+    method void addX(int dx) {
+        let X = X + dx;
+        return;
+    }
+    /** Add some amount to y **/
+    method void addY(int dy) {
+        let Y = Y + dy;
+        return;
+    }
+
+    /** Return true iff both x and y are equal **/
+    method boolean equals(Coord xy) {
+        return ((X = xy.x()) & (Y = xy.y()));
+    }
+}

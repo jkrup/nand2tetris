@@ -1,0 +1,334 @@
+// Dungeon Dude
+// Dungeon.jack
+// Author: Marcin Swieczkowski
+// Created: Fri Mar 24 19:36:48 CET 2017
+//
+// The dungeon is the entirety of the game world.
+// It contains the current level (only one level is ever stored at once),
+// the rooms of that level, an array of actors, an array of gold locations,
+// and an array of staircases.
+//
+// We use static arrays rather than some fancier data structures to avoid
+// incurring performance penalties and because we won't be resizing them.
+
+/** Class implementing the dungeon **/
+class Dungeon {
+    field Actor player;
+
+    field Array rooms;
+    field Array actors;
+    field Array gold;
+    field Array food;
+    field Array stairs;
+
+    field int roomsSize;
+    field int actorsSize;
+    field int goldSize;
+    field int foodSize;
+    field int stairsSize;
+
+    field boolean initialized;
+
+    /** Just initializes the data structures without generating a layout **/
+    constructor Dungeon new(int level) {
+        do initDungeon(level);
+        let player = Actor.new(0);
+
+        return this;
+    }
+
+    /** Dispose! **/
+    method void dispose() {
+        if (initialized) {
+            do clearDungeon();
+        }
+        do player.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    /** Initialize dungeon data structures based on level **/
+    method void initDungeon(int level) {
+        let roomsSize = Dungeon.getRoomsSize(level);
+        let actorsSize = Dungeon.getActorsSize(level);
+        let goldSize = Dungeon.getGoldSize(level);
+        let foodSize = Dungeon.getFoodSize(level);
+        let stairsSize = Dungeon.getStairsSize(level);
+
+        let rooms = Array.new(roomsSize);
+        let actors = Array.new(actorsSize);
+        let gold = Array.new(goldSize);
+        let food = Array.new(foodSize);
+        let stairs = Array.new(stairsSize);
+
+        let initialized = -1;
+        return;
+    }
+
+    function int getRoomsSize(int level) {
+        // return 15+(15*level);
+        return 1;
+    }
+    function int getActorsSize(int level) {
+        return 1*level;
+    }
+    function int getGoldSize(int level) {
+        return 2+3*level;
+    }
+    function int getFoodSize(int level) {
+        return 2;
+    }
+    function int getStairsSize(int level) {
+        return 2;
+    }
+
+    /** Clear the dungeon's data **/
+    method void clearDungeon() {
+        do rooms.dispose();
+        do actors.dispose();
+        do gold.dispose();
+        do food.dispose();
+        do stairs.dispose();
+
+        let initialized = 0;
+
+        return;
+    }
+
+    /** Generate a dungeon **/
+    method void generate() {
+        do generateRooms();
+
+        do generateActors();
+        do generateGold();
+        do generateFood();
+        do generateStairs();
+
+        do generatePlayer();
+
+        return;
+    }
+
+    method void generateRooms() {
+        var Room r;
+
+        let r = Room.new(0, 0, 10, 10);
+        let rooms[0] = r;
+
+        return;
+    }
+    method void generateActors() {
+        var Actor a;
+        var int i;
+
+        let i = 0;
+        while (i < actorsSize) {
+            let a = Actor.new(1);
+            do a.setXY(pickEmpty(i, 0, 0, 0));
+            let actors[i] = a;
+            let i = i+1;
+        }
+        return;
+    }
+    method void generateGold() {
+        var int i;
+
+        let i = 0;
+        while (i < goldSize) {
+            let gold[i] = pickEmpty(0, i, 0, 0);
+            let i = i+1;
+        }
+        return;
+    }
+    method void generateFood() {
+        var int i;
+
+        let i = 0;
+        while (i < foodSize) {
+            let food[i] = pickEmpty(actorsSize, goldSize, i, 0);
+            let i = i+1;
+        }
+        return;
+    }
+    method void generateStairs() {
+        var int i;
+
+        let i = 0;
+        while (i < stairsSize) {
+            let stairs[i] = pickEmpty(0, goldSize, foodSize, i);
+            let i = i+1;
+        }
+        return;
+    }
+    /** Set the player coordinates, note this doesn't create the player **/
+    method void generatePlayer() {
+        var Coord c;
+
+        let c = pickEmpty(actorsSize, goldSize, foodSize, stairsSize);
+        do player.setXY(c);
+        return;
+    }
+
+    /** Check for collision with an actor apart from the player **/
+    method boolean hasActor(Coord c) {
+        return chkEmpty(c, actorsSize, 0, 0, 0);
+    }
+
+    /** Check for collision with anything **/
+    method boolean chkEmpty(Coord c, int chkActors, int chkGold, int chkFood,
+                            int chkStairs) {
+        var Actor a;
+        var Coord xy;
+        var int i;
+
+        // Check collisions with actors
+        let i = 0;
+        while (i < chkActors) {
+            let a = actors[i];
+            if (c.equals(a.xy())) {
+                return 0;
+            }
+            let i = i+1;
+        }
+        // Check collisions with gold
+        let i = 0;
+        while (i < chkGold) {
+            let xy = gold[i];
+            if (c.equals(xy)) {
+                return 0;
+            }
+            let i = i+1;
+        }
+        // Check collisions with food
+        let i = 0;
+        while (i < chkFood) {
+            let xy = food[i];
+            if (c.equals(xy)) {
+                return 0;
+            }
+            let i = i+1;
+        }
+        // Check collisions with stairs
+        let i = 0;
+        while (i < chkStairs) {
+            let xy = stairs[i];
+            if (c.equals(xy)) {
+                return 0;
+            }
+            let i = i+1;
+        }
+
+        return -1;
+    }
+
+    /** Return an empty cell from one of the rooms in the dungeon **/
+    method Coord pickEmpty(int chkActors, int chkGold, int chkFood,
+                           int chkStairs) {
+        var Room r;
+        var Coord c;
+        var int i;
+        var boolean ok;
+
+        let ok = 0;
+        while (~ok) {
+            let r = rooms[Random.randRange(0, roomsSize-1)];
+            let c = r.pickRandom();
+
+            let ok = chkEmpty(c, chkActors, chkGold, chkFood, chkStairs);
+        }
+        do c.setRoom(r); // make sure the coord is associated with a room
+
+        return c;
+    }
+
+    /** Advance the game one step **/
+    method void nextStep() {
+        var Actor a;
+        var Room activeRoom;
+        var int result;
+        var int i;
+
+        // Draw the game
+        do draw();
+
+        // Let the player act
+        let result = player.act(this);
+        let activeRoom = player.room();
+
+        // Let all other actors act
+        let i = 0;
+        while (i < actorsSize) {
+            let a = actors[i];
+            // first check if the actor is in the current room
+            if (a.room() = activeRoom) {
+                let result = a.act(this);
+            }
+            let i = i+1;
+        }
+
+        return;
+    }
+
+    /** Draw the dungeon **/
+    method void draw() {
+        var Actor a;
+        var Coord c;
+        var Room activeRoom;
+        var int i;
+
+        // Draw the UI
+        do drawUI();
+
+        let activeRoom = player.room();
+        do activeRoom.draw();
+
+        // Draw stairs first
+        let i = 0;
+        while (i < stairsSize) {
+            let c = stairs[i];
+            if (c.room() = activeRoom) {
+                do activeRoom.drawChar(c.y(), c.x(), 62); // draw ">"
+            }
+            let i = i+1;
+        }
+        // Draw food
+        let i = 0;
+        while (i < foodSize) {
+            let c = food[i];
+            if (c.room() = activeRoom) {
+                do activeRoom.drawChar(c.y(), c.x(), 43); // draw "+"
+            }
+            let i = i+1;
+        }
+        // Draw gold
+        let i = 0;
+        while (i < goldSize) {
+            let c = gold[i];
+            if (c.room() = activeRoom) {
+                do activeRoom.drawChar(c.y(), c.x(), 36); // draw "$"
+            }
+            let i = i+1;
+        }
+        // Draw actors
+        let i = 0;
+        while (i < actorsSize) {
+            let a = actors[i];
+            if (a.room() = activeRoom) {
+                do activeRoom.drawChar(a.y(), a.x(), a.c());
+            }
+            let i = i+1;
+        }
+
+        // Finally, draw the player
+        do activeRoom.drawChar(player.y(), player.x(), player.c());
+
+        return;
+    }
+
+    /** Draw the UI **/
+    method void drawUI() {
+        do Screen.setColor(-1);
+        do Screen.drawRectangle(0,0,511,255);
+        return;
+    }
+}

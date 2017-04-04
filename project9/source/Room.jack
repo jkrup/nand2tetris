@@ -1,0 +1,104 @@
+// Dungeon Dude
+// Room.jack
+// Author: Marcin Swieczkowski
+// Created: Mon Mar 27 10:40:32 CEST 2017
+//
+// Basic room class. Nothing fancy, could have been a struct in another language
+
+/** Class implementing rooms **/
+class Room {
+    field Coord XY;
+    field int width;
+    field int height;
+    field int right;
+    field int bottom;
+    field int viewX;
+    field int viewY;
+    field int numDoors;
+
+    field Array doors;     // array of door coordinates
+    field Array doorRooms; // array of room pointers, kept in sync with "doors"
+
+    method int x() { return XY.x(); }
+    method int y() { return XY.y(); }
+    method int w() { return width; }
+    method int h() { return height; }
+    /** Get the right-most x position of the room **/
+    method int right()  { return right; }
+    /** Get the bottom-most y position of the room **/
+    method int bottom() { return bottom; }
+
+    /** Create a room at given coordinates with given width and height **/
+    constructor Room new(int i, int j, int w, int h) {
+        let XY       = Coord.new(i, j);
+        let width    = w;
+        let height   = h;
+        let right    = j + width - 1;
+        let bottom   = i + height - 1;
+        let viewX    = j - ((Utility.SCR_W() / 2) - (width / 2));
+        let viewY    = i - ((Utility.SCR_H() / 2) - (height / 2));
+        let numDoors = 0;
+
+        let doors = Array.new(Room.maxDoors());
+        let doorRooms = Array.new(Room.maxDoors());
+
+        return this;
+    }
+
+    /** Dispose! **/
+    method void dispose() {
+        do XY.dispose();
+        do doors.dispose();
+        do doorRooms.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    /** Max number of allowed neighbors **/
+    function int maxDoors() { return 5; }
+
+    /** Returns the coordinates of a random location from the room **/
+    method Coord pickRandom() {
+        var int i;
+        var int j;
+
+        let i = Random.randRange(y(), bottom());
+        let j = Random.randRange(x(), right());
+
+        return Coord.new(i, j);
+    }
+
+    /** Returns true if the room contains the point **/
+    method boolean contains(Coord c) {
+        return Utility.between(c.y(), y(), bottom()) &
+            Utility.between(c.x(), x(), right());
+    }
+
+    /** Returns true if the two rooms overlap **/
+    method boolean overlaps(Room r) {
+        return Utility.overlaps(y(), bottom(), r.y(), r.bottom()) &
+            Utility.overlaps(x(), right(), r.x(), r.right());
+    }
+
+    /** Draws the room **/
+    method void draw() {
+        var int i, j;
+
+        let i = 0;
+        while (i < height) {
+            let j = 0;
+            while (j < width) {
+                do drawChar(y()+i, x()+j, 46); // draw "."
+                let j = j+1;
+            }
+            let i = i+1;
+        }
+        return;
+    }
+
+    /** Draw character at a location on the room **/
+    method void drawChar(int i, int j, char c) {
+        do Utility.outChar(i - viewY, j - viewX, c);
+        return;
+    }
+}

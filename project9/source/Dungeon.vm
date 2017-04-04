@@ -1,0 +1,709 @@
+function Dungeon.new 0
+push constant 12
+call Memory.alloc 1
+pop pointer 0
+push pointer 0
+push argument 0
+call Dungeon.initDungeon 2
+pop temp 0
+push constant 0
+call Actor.new 1
+pop this 0
+push pointer 0
+return
+function Dungeon.dispose 0
+push argument 0
+pop pointer 0
+push this 11
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push pointer 0
+call Dungeon.clearDungeon 1
+pop temp 0
+label IF_FALSE0
+push this 0
+call Actor.dispose 1
+pop temp 0
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return
+function Dungeon.initDungeon 0
+push argument 0
+pop pointer 0
+push argument 1
+call Dungeon.getRoomsSize 1
+pop this 6
+push argument 1
+call Dungeon.getActorsSize 1
+pop this 7
+push argument 1
+call Dungeon.getGoldSize 1
+pop this 8
+push argument 1
+call Dungeon.getFoodSize 1
+pop this 9
+push argument 1
+call Dungeon.getStairsSize 1
+pop this 10
+push this 6
+call Array.new 1
+pop this 1
+push this 7
+call Array.new 1
+pop this 2
+push this 8
+call Array.new 1
+pop this 3
+push this 9
+call Array.new 1
+pop this 4
+push this 10
+call Array.new 1
+pop this 5
+push constant 1
+neg
+pop this 11
+push constant 0
+return
+function Dungeon.getRoomsSize 0
+push constant 1
+return
+function Dungeon.getActorsSize 0
+push constant 1
+push argument 0
+call Math.multiply 2
+return
+function Dungeon.getGoldSize 0
+push constant 2
+push constant 3
+add
+push argument 0
+call Math.multiply 2
+return
+function Dungeon.getFoodSize 0
+push constant 2
+return
+function Dungeon.getStairsSize 0
+push constant 2
+return
+function Dungeon.clearDungeon 0
+push argument 0
+pop pointer 0
+push this 1
+call Array.dispose 1
+pop temp 0
+push this 2
+call Array.dispose 1
+pop temp 0
+push this 3
+call Array.dispose 1
+pop temp 0
+push this 4
+call Array.dispose 1
+pop temp 0
+push this 5
+call Array.dispose 1
+pop temp 0
+push constant 0
+pop this 11
+push constant 0
+return
+function Dungeon.generate 0
+push argument 0
+pop pointer 0
+push pointer 0
+call Dungeon.generateRooms 1
+pop temp 0
+push pointer 0
+call Dungeon.generateActors 1
+pop temp 0
+push pointer 0
+call Dungeon.generateGold 1
+pop temp 0
+push pointer 0
+call Dungeon.generateFood 1
+pop temp 0
+push pointer 0
+call Dungeon.generateStairs 1
+pop temp 0
+push pointer 0
+call Dungeon.generatePlayer 1
+pop temp 0
+push constant 0
+return
+function Dungeon.generateRooms 1
+push argument 0
+pop pointer 0
+push constant 0
+push constant 0
+push constant 10
+push constant 10
+call Room.new 4
+pop local 0
+push constant 0
+push this 1
+add
+push local 0
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 0
+return
+function Dungeon.generateActors 2
+push argument 0
+pop pointer 0
+push constant 0
+pop local 1
+label WHILE_EXP0
+push local 1
+push this 7
+lt
+not
+if-goto WHILE_END0
+push constant 1
+call Actor.new 1
+pop local 0
+push local 0
+push pointer 0
+push local 1
+push constant 0
+push constant 0
+push constant 0
+call Dungeon.pickEmpty 5
+call Actor.setXY 2
+pop temp 0
+push local 1
+push this 2
+add
+push local 0
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 1
+push constant 1
+add
+pop local 1
+goto WHILE_EXP0
+label WHILE_END0
+push constant 0
+return
+function Dungeon.generateGold 1
+push argument 0
+pop pointer 0
+push constant 0
+pop local 0
+label WHILE_EXP0
+push local 0
+push this 8
+lt
+not
+if-goto WHILE_END0
+push local 0
+push this 3
+add
+push pointer 0
+push constant 0
+push local 0
+push constant 0
+push constant 0
+call Dungeon.pickEmpty 5
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push constant 0
+return
+function Dungeon.generateFood 1
+push argument 0
+pop pointer 0
+push constant 0
+pop local 0
+label WHILE_EXP0
+push local 0
+push this 9
+lt
+not
+if-goto WHILE_END0
+push local 0
+push this 4
+add
+push pointer 0
+push this 7
+push this 8
+push local 0
+push constant 0
+call Dungeon.pickEmpty 5
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push constant 0
+return
+function Dungeon.generateStairs 1
+push argument 0
+pop pointer 0
+push constant 0
+pop local 0
+label WHILE_EXP0
+push local 0
+push this 10
+lt
+not
+if-goto WHILE_END0
+push local 0
+push this 5
+add
+push pointer 0
+push constant 0
+push this 8
+push this 9
+push local 0
+call Dungeon.pickEmpty 5
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push constant 0
+return
+function Dungeon.generatePlayer 1
+push argument 0
+pop pointer 0
+push pointer 0
+push this 7
+push this 8
+push this 9
+push this 10
+call Dungeon.pickEmpty 5
+pop local 0
+push this 0
+push local 0
+call Actor.setXY 2
+pop temp 0
+push constant 0
+return
+function Dungeon.hasActor 0
+push argument 0
+pop pointer 0
+push pointer 0
+push argument 1
+push this 7
+push constant 0
+push constant 0
+push constant 0
+call Dungeon.chkEmpty 6
+return
+function Dungeon.chkEmpty 3
+push argument 0
+pop pointer 0
+push constant 0
+pop local 2
+label WHILE_EXP0
+push local 2
+push argument 2
+lt
+not
+if-goto WHILE_END0
+push local 2
+push this 2
+add
+pop pointer 1
+push that 0
+pop local 0
+push argument 1
+push local 0
+call Actor.xy 1
+call Coord.equals 2
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+return
+label IF_FALSE0
+push local 2
+push constant 1
+add
+pop local 2
+goto WHILE_EXP0
+label WHILE_END0
+push constant 0
+pop local 2
+label WHILE_EXP1
+push local 2
+push argument 3
+lt
+not
+if-goto WHILE_END1
+push local 2
+push this 3
+add
+pop pointer 1
+push that 0
+pop local 1
+push argument 1
+push local 1
+call Coord.equals 2
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 0
+return
+label IF_FALSE1
+push local 2
+push constant 1
+add
+pop local 2
+goto WHILE_EXP1
+label WHILE_END1
+push constant 0
+pop local 2
+label WHILE_EXP2
+push local 2
+push argument 4
+lt
+not
+if-goto WHILE_END2
+push local 2
+push this 4
+add
+pop pointer 1
+push that 0
+pop local 1
+push argument 1
+push local 1
+call Coord.equals 2
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push constant 0
+return
+label IF_FALSE2
+push local 2
+push constant 1
+add
+pop local 2
+goto WHILE_EXP2
+label WHILE_END2
+push constant 0
+pop local 2
+label WHILE_EXP3
+push local 2
+push argument 5
+lt
+not
+if-goto WHILE_END3
+push local 2
+push this 5
+add
+pop pointer 1
+push that 0
+pop local 1
+push argument 1
+push local 1
+call Coord.equals 2
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
+push constant 0
+return
+label IF_FALSE3
+push local 2
+push constant 1
+add
+pop local 2
+goto WHILE_EXP3
+label WHILE_END3
+push constant 1
+neg
+return
+function Dungeon.pickEmpty 4
+push argument 0
+pop pointer 0
+push constant 0
+pop local 3
+label WHILE_EXP0
+push local 3
+not
+not
+if-goto WHILE_END0
+push constant 0
+push this 6
+push constant 1
+sub
+call Random.randRange 2
+push this 1
+add
+pop pointer 1
+push that 0
+pop local 0
+push local 0
+call Room.pickRandom 1
+pop local 1
+push pointer 0
+push local 1
+push argument 1
+push argument 2
+push argument 3
+push argument 4
+call Dungeon.chkEmpty 6
+pop local 3
+goto WHILE_EXP0
+label WHILE_END0
+push local 1
+push local 0
+call Coord.setRoom 2
+pop temp 0
+push local 1
+return
+function Dungeon.nextStep 4
+push argument 0
+pop pointer 0
+push pointer 0
+call Dungeon.draw 1
+pop temp 0
+push this 0
+push pointer 0
+call Actor.act 2
+pop local 2
+push this 0
+call Actor.room 1
+pop local 1
+push constant 0
+pop local 3
+label WHILE_EXP0
+push local 3
+push this 7
+lt
+not
+if-goto WHILE_END0
+push local 3
+push this 2
+add
+pop pointer 1
+push that 0
+pop local 0
+push local 0
+call Actor.room 1
+push local 1
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push local 0
+push pointer 0
+call Actor.act 2
+pop local 2
+label IF_FALSE0
+push local 3
+push constant 1
+add
+pop local 3
+goto WHILE_EXP0
+label WHILE_END0
+push constant 0
+return
+function Dungeon.draw 4
+push argument 0
+pop pointer 0
+push pointer 0
+call Dungeon.drawUI 1
+pop temp 0
+push this 0
+call Actor.room 1
+pop local 2
+push local 2
+call Room.draw 1
+pop temp 0
+push constant 0
+pop local 3
+label WHILE_EXP0
+push local 3
+push this 10
+lt
+not
+if-goto WHILE_END0
+push local 3
+push this 5
+add
+pop pointer 1
+push that 0
+pop local 1
+push local 1
+call Coord.room 1
+push local 2
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push local 2
+push local 1
+call Coord.y 1
+push local 1
+call Coord.x 1
+push constant 62
+call Room.drawChar 4
+pop temp 0
+label IF_FALSE0
+push local 3
+push constant 1
+add
+pop local 3
+goto WHILE_EXP0
+label WHILE_END0
+push constant 0
+pop local 3
+label WHILE_EXP1
+push local 3
+push this 9
+lt
+not
+if-goto WHILE_END1
+push local 3
+push this 4
+add
+pop pointer 1
+push that 0
+pop local 1
+push local 1
+call Coord.room 1
+push local 2
+eq
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push local 2
+push local 1
+call Coord.y 1
+push local 1
+call Coord.x 1
+push constant 43
+call Room.drawChar 4
+pop temp 0
+label IF_FALSE1
+push local 3
+push constant 1
+add
+pop local 3
+goto WHILE_EXP1
+label WHILE_END1
+push constant 0
+pop local 3
+label WHILE_EXP2
+push local 3
+push this 8
+lt
+not
+if-goto WHILE_END2
+push local 3
+push this 3
+add
+pop pointer 1
+push that 0
+pop local 1
+push local 1
+call Coord.room 1
+push local 2
+eq
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push local 2
+push local 1
+call Coord.y 1
+push local 1
+call Coord.x 1
+push constant 36
+call Room.drawChar 4
+pop temp 0
+label IF_FALSE2
+push local 3
+push constant 1
+add
+pop local 3
+goto WHILE_EXP2
+label WHILE_END2
+push constant 0
+pop local 3
+label WHILE_EXP3
+push local 3
+push this 7
+lt
+not
+if-goto WHILE_END3
+push local 3
+push this 2
+add
+pop pointer 1
+push that 0
+pop local 0
+push local 0
+call Actor.room 1
+push local 2
+eq
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
+push local 2
+push local 0
+call Actor.y 1
+push local 0
+call Actor.x 1
+push local 0
+call Actor.c 1
+call Room.drawChar 4
+pop temp 0
+label IF_FALSE3
+push local 3
+push constant 1
+add
+pop local 3
+goto WHILE_EXP3
+label WHILE_END3
+push local 2
+push this 0
+call Actor.y 1
+push this 0
+call Actor.x 1
+push this 0
+call Actor.c 1
+call Room.drawChar 4
+pop temp 0
+push constant 0
+return
+function Dungeon.drawUI 0
+push argument 0
+pop pointer 0
+push constant 1
+neg
+call Screen.setColor 1
+pop temp 0
+push constant 0
+push constant 0
+push constant 511
+push constant 255
+call Screen.drawRectangle 4
+pop temp 0
+push constant 0
+return

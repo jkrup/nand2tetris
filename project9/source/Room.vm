@@ -1,0 +1,226 @@
+function Room.x 0
+push argument 0
+pop pointer 0
+push this 0
+call Coord.x 1
+return
+function Room.y 0
+push argument 0
+pop pointer 0
+push this 0
+call Coord.y 1
+return
+function Room.w 0
+push argument 0
+pop pointer 0
+push this 1
+return
+function Room.h 0
+push argument 0
+pop pointer 0
+push this 2
+return
+function Room.right 0
+push argument 0
+pop pointer 0
+push this 3
+return
+function Room.bottom 0
+push argument 0
+pop pointer 0
+push this 4
+return
+function Room.new 0
+push constant 10
+call Memory.alloc 1
+pop pointer 0
+push argument 0
+push argument 1
+call Coord.new 2
+pop this 0
+push argument 2
+pop this 1
+push argument 3
+pop this 2
+push argument 1
+push this 1
+add
+push constant 1
+sub
+pop this 3
+push argument 0
+push this 2
+add
+push constant 1
+sub
+pop this 4
+push argument 1
+call Utility.SCR_W 0
+push constant 2
+call Math.divide 2
+push this 1
+push constant 2
+call Math.divide 2
+sub
+sub
+pop this 5
+push argument 0
+call Utility.SCR_H 0
+push constant 2
+call Math.divide 2
+push this 2
+push constant 2
+call Math.divide 2
+sub
+sub
+pop this 6
+push constant 0
+pop this 7
+call Room.maxDoors 0
+call Array.new 1
+pop this 8
+call Room.maxDoors 0
+call Array.new 1
+pop this 9
+push pointer 0
+return
+function Room.dispose 0
+push argument 0
+pop pointer 0
+push this 0
+call Coord.dispose 1
+pop temp 0
+push this 8
+call Array.dispose 1
+pop temp 0
+push this 9
+call Array.dispose 1
+pop temp 0
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return
+function Room.maxDoors 0
+push constant 5
+return
+function Room.pickRandom 2
+push argument 0
+pop pointer 0
+push pointer 0
+call Room.y 1
+push pointer 0
+call Room.bottom 1
+call Random.randRange 2
+pop local 0
+push pointer 0
+call Room.x 1
+push pointer 0
+call Room.right 1
+call Random.randRange 2
+pop local 1
+push local 0
+push local 1
+call Coord.new 2
+return
+function Room.contains 0
+push argument 0
+pop pointer 0
+push argument 1
+call Coord.y 1
+push pointer 0
+call Room.y 1
+push pointer 0
+call Room.bottom 1
+call Utility.between 3
+push argument 1
+call Coord.x 1
+push pointer 0
+call Room.x 1
+push pointer 0
+call Room.right 1
+call Utility.between 3
+and
+return
+function Room.overlaps 0
+push argument 0
+pop pointer 0
+push pointer 0
+call Room.y 1
+push pointer 0
+call Room.bottom 1
+push argument 1
+call Room.y 1
+push argument 1
+call Room.bottom 1
+call Utility.overlaps 4
+push pointer 0
+call Room.x 1
+push pointer 0
+call Room.right 1
+push argument 1
+call Room.x 1
+push argument 1
+call Room.right 1
+call Utility.overlaps 4
+and
+return
+function Room.draw 2
+push argument 0
+pop pointer 0
+push constant 0
+pop local 0
+label WHILE_EXP0
+push local 0
+push this 2
+lt
+not
+if-goto WHILE_END0
+push constant 0
+pop local 1
+label WHILE_EXP1
+push local 1
+push this 1
+lt
+not
+if-goto WHILE_END1
+push pointer 0
+push pointer 0
+call Room.y 1
+push local 0
+add
+push pointer 0
+call Room.x 1
+push local 1
+add
+push constant 46
+call Room.drawChar 4
+pop temp 0
+push local 1
+push constant 1
+add
+pop local 1
+goto WHILE_EXP1
+label WHILE_END1
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push constant 0
+return
+function Room.drawChar 0
+push argument 0
+pop pointer 0
+push argument 1
+push this 6
+sub
+push argument 2
+push this 5
+sub
+push argument 3
+call Utility.outChar 3
+pop temp 0
+push constant 0
+return

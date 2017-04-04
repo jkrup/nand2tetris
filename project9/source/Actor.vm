@@ -1,0 +1,106 @@
+function Actor.x 0
+push argument 0
+pop pointer 0
+push this 1
+call Coord.x 1
+return
+function Actor.y 0
+push argument 0
+pop pointer 0
+push this 1
+call Coord.y 1
+return
+function Actor.xy 0
+push argument 0
+pop pointer 0
+push this 1
+return
+function Actor.c 0
+push argument 0
+pop pointer 0
+push this 0
+return
+function Actor.room 0
+push argument 0
+pop pointer 0
+push this 1
+call Coord.room 1
+return
+function Actor.setXY 0
+push argument 0
+pop pointer 0
+push this 1
+call Coord.dispose 1
+pop temp 0
+push argument 1
+pop this 1
+push constant 0
+return
+function Actor.setRoom 0
+push argument 0
+pop pointer 0
+push this 1
+push argument 1
+call Coord.setRoom 2
+pop temp 0
+push constant 0
+return
+function Actor.new 0
+push constant 3
+call Memory.alloc 1
+pop pointer 0
+push constant 0
+push constant 0
+call Coord.new 2
+pop this 1
+push argument 0
+pop this 2
+push argument 0
+push constant 0
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 64
+pop this 0
+push pointer 0
+return
+label IF_FALSE0
+push argument 0
+push constant 1
+eq
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 119
+pop this 0
+push pointer 0
+return
+label IF_FALSE1
+push pointer 0
+return
+function Actor.dispose 0
+push argument 0
+pop pointer 0
+push this 1
+call Coord.dispose 1
+pop temp 0
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return
+function Actor.act 1
+push argument 0
+pop pointer 0
+push this 2
+push constant 0
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+call Keyboard.readChar 0
+pop local 0
+label IF_FALSE0
+push constant 0
+return

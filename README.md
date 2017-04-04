@@ -6,6 +6,10 @@ This is my coursework for Build a Modern Computer From First Principles: From Na
 
 Nand2Tetris is a self-directed, project-oriented online course whose aim is to build a computer capable of running Tetris starting from nothing but the humble NAND gate.
 
+### Update (4/4/2017)
+
+As of this date I am taking a break from Part 2 of this course and I am committing project 9 in a half-complete state.
+
 ## Notable
 
 Some of the chips and programs developed in this course are highly instructive. Notable examples are:
